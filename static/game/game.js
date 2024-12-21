@@ -22,12 +22,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const startGameButton = document.getElementById('start-game');
     const continueGameButton = document.getElementById('continue-game');
     const instructionsButton = document.getElementById('instructions');
-    const quitGameButton = document.getElementById('quit-game');
 
     const resumeGameButton = document.getElementById('resume-game');
     const returnToMenuButton = document.getElementById('return-to-menu');
     const saveGameButton = document.getElementById('pause-save-game');
-    const pauseQuitButton = document.getElementById('pause-quit-game');
 
     const gameState = {
         xp: 0,
@@ -165,15 +163,13 @@ document.addEventListener('DOMContentLoaded', () => {
     startGameButton.addEventListener('click', startGame);
     continueGameButton.addEventListener('click', continueGame);
     instructionsButton.addEventListener('click', () => alert('Instructions: Make choices to progress in the story.'));
-    quitGameButton.addEventListener('click', returnToMenu);
 
     resumeGameButton.addEventListener('click', resumeGame);
     returnToMenuButton.addEventListener('click', returnToMenu);
     saveGameButton.addEventListener('click', saveGame);
-    pauseQuitButton.addEventListener('click', returnToMenu);
 
     document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape') {
+        if (e.key === 'p') {
             if (gameState.isPaused) resumeGame();
             else pauseGame();
         }
@@ -238,32 +234,23 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         },
         thickForest: {
-            text: "The forest grows darker as you proceed. A growl emerges from the shadows.",
-            skillCheck: {
-                type: "roll", // Skill check type: "roll" or "attribute"
-                successThreshold: 10, // Minimum roll needed to succeed
-                success: { next: "fightBeast", xp: 20 },
-                failure: { next: "fleeToCamp", healthChange: -10 }
-            },
+            text: "The forest grows darker as you proceed. You hear rustling in the bushes. Ahead, you see a faint outline of a creature.",
             choices: {
-                "Attempt to Confront the Sound": { challenge: true }
+                "Investigate the Creature": { next: "fightBeast", xp: 15 },
+                "Hide and Observe": { next: "fleeToCamp", xp: 5 },
             },
-            timed: true,
-            timer: 10, // Timer duration in seconds
-            defaultChoice: "fleeToCamp" // Default action if timer runs out
         },
         fightBeast: {
-            text: "You bravely face the beast and defeat it. You find a glowing amulet among its remains.",
+            text: "You bravely face the creature and discover it's a wild beast. After a fierce battle, you manage to defeat it and find a glowing amulet among its remains.",
             choices: {
-                "Take the Amulet": { next: "amuletFound", xp: 30, items: ["Amulet"] }
-            }
+                "Take the Amulet": { next: "amuletFound", xp: 30, items: ["Amulet"] },
+            },
         },
         fleeToCamp: {
-            text: "You stumble upon an abandoned camp. The fire still smolders, and you find a healing herb.",
+            text: "You quietly move away from the creature and stumble upon an abandoned camp. You find some useful supplies.",
             choices: {
-                "Use the Herb": { next: "healedCamp", xp: 10, healthChange: +20, items: ["Herb"] },
-                "Search the Camp": { next: "searchCamp", xp: 15 }
-            }
+                "Take the Supplies": { next: "searchCamp", xp: 20, items: ["Torch", "Herb"] },
+            },
         },
         healedCamp: {
             text: "You use the herb to heal your wounds. Feeling better, you prepare to explore further.",
@@ -404,16 +391,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
     };
-
-    function checkAchievements() {
-        achievements.forEach(achievement => {
-            if (achievement.condition() && !unlockedAchievements.includes(achievement.id)) {
-                unlockedAchievements.push(achievement.id);
-                localStorage.setItem("achievements", JSON.stringify(unlockedAchievements));
-                showAchievementModal(achievement);
-            }
-        });
-    }
     
     function openInventory() {
         const inventoryModal = document.getElementById('inventory-modal');
@@ -446,11 +423,6 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('profile-modal').style.display = 'none';
         document.getElementById('game-container').insertAdjacentHTML('afterbegin', `<h2>Welcome, ${playerName}!</h2>`);
     }
-    
-    function updateStory(sceneKey) {
-        updateProgress(sceneKey); // Update progress tracker
-        // Rest of the story update logic...
-    }
 
     function showAchievementModal(achievement) {
         const modal = document.getElementById('achievement-modal');
@@ -465,21 +437,52 @@ document.addEventListener('DOMContentLoaded', () => {
             modal.style.display = 'none';
         };
     }
+    
 
     function checkMilestones() {
-        milestones.forEach((milestone, index) => {
+        for (let i = milestones.length - 1; i >= 0; i--) {
+            let milestone = milestones[i];
+            let milestoneReached = false;
+            let milestoneReason = ""; // Store the reason for reaching the milestone
+    
+            // Check milestone conditions and set the reason
             if (milestone.type === "xp" && gameState.xp >= milestone.value) {
-                applyReward(milestone.reward);
-                milestones.splice(index, 1); // Remove milestone after completion
+                milestoneReached = true;
+                milestoneReason = `Earn ${milestone.value} XP points.`;
             } else if (milestone.type === "story" && gameState.currentScene === milestone.scene) {
-                applyReward(milestone.reward);
-                milestones.splice(index, 1);
+                milestoneReached = true;
+                milestoneReason = `Reach the story milestone: ${milestone.scene}.`;
             } else if (milestone.type === "items" && gameState.inventory.length >= milestone.count) {
-                applyReward(milestone.reward);
-                milestones.splice(index, 1);
+                milestoneReached = true;
+                milestoneReason = `Collect ${milestone.count} items.`;
             }
-        });
+    
+            // If milestone is reached, apply reward and show modal
+            if (milestoneReached) {
+                applyReward(milestone.reward);
+    
+                // Show milestone modal with milestone type, reason, and reward details
+                const rewardDetails = `
+                    ${milestoneReason}<br>
+                    <strong>Reward:</strong> ${
+                        milestone.reward.type === "item"
+                            ? milestone.reward.name
+                            : `${milestone.reward.amount} ${milestone.reward.type.toUpperCase()}`
+                    }
+                `;
+    
+                showModal("milestone", rewardDetails);
+    
+                // Remove the milestone from the list
+                milestones.splice(i, 1); // Safe to splice in reverse loop
+            }
+        }
     }
+    
+    
+    
+    
+    
 
     function updateProgressBars() {
         const xpProgress = document.getElementById('xp-progress');
@@ -488,41 +491,63 @@ document.addEventListener('DOMContentLoaded', () => {
         xpProgress.style.width = `${Math.min((gameState.xp / 200) * 100, 100)}%`;
         healthProgress.style.width = `${gameState.health}%`;
     }
+
+    function checkAchievements() {
+        achievements.forEach((achievement) => {
+            if (achievement.condition() && !unlockedAchievements.includes(achievement.id)) {
+                unlockedAchievements.push(achievement.id);
+                localStorage.setItem("achievements", JSON.stringify(unlockedAchievements));
+                showAchievementModal(achievement);
+            }
+        });
+    }
     
     
     
     function applyReward(reward) {
-        if (reward.type === "item") {
+        if (reward.type === 'item') {
             gameState.inventory.push(reward.name);
             updateInventoryDisplay();
-            showModal(`You received a new item: ${reward.name}`);
-        } else if (reward.type === "health") {
+            showModal("milestone", `You received a new item: ${reward.name}`);
+        } else if (reward.type === 'health') {
             gameState.health += reward.amount;
             gameState.health = Math.min(100, gameState.health);
             healthDisplay.textContent = gameState.health;
-            updateProgressBars(); // Ensure this function is defined
-            showModal(`Your health increased by ${reward.amount}!`);
-        } else if (reward.type === "xp") {
+            updateProgressBars();
+            showModal("milestone", `Your health increased by ${reward.amount}!`);
+        } else if (reward.type === 'xp') {
             gameState.xp += reward.amount;
             gameState.playerStats.totalXP += reward.amount;
             xpDisplay.textContent = gameState.xp;
-            updateProgressBars(); // Ensure this function is defined
-            showModal(`You gained ${reward.amount} XP!`);
+            updateProgressBars();
+            showModal("milestone", `You gained ${reward.amount} XP!`);
         }
     }
     
     
     
-    function showModal(message) {
-        const modal = document.getElementById('milestone-modal');
-        const milestoneMessage = document.getElementById('milestone-message');
-        milestoneMessage.textContent = message;
-        modal.style.display = 'block';
     
-        document.getElementById('close-milestone').onclick = () => {
-            modal.style.display = 'none';
+    
+    function showModal(type, message) {
+        const modal = document.getElementById(`${type}-modal`);
+        const modalMessage = document.getElementById(`${type}-message`);
+    
+        if (!modal || !modalMessage) {
+            console.error(`Modal or message element not found for type: ${type}`);
+            return;
+        }
+    
+        // Use innerHTML to interpret the message as HTML
+        modalMessage.innerHTML = message;
+        modal.style.display = "block";
+    
+        document.getElementById(`close-${type}`).onclick = () => {
+            modal.style.display = "none";
         };
     }
+    
+    
+    
     
     
     function gameOver() {
@@ -590,6 +615,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     gameState.playerStats.choicesMade++; // Correct reference
                     displayStats();
                     updateStory(choiceDetails.next);
+                    checkAchievements(); 
                     checkMilestones();
                 });
             }
@@ -601,48 +627,6 @@ document.addEventListener('DOMContentLoaded', () => {
             startTimer(scene.timer, scene.defaultChoice);
         }
     }
-    
-
-    function handleSkillCheck(scene) {
-        const skillCheck = scene.skillCheck;
-    
-        if (skillCheck.type === "roll") {
-            const roll = Math.floor(Math.random() * 20) + 1; // Roll a d20
-            alert(`You rolled a ${roll}!`);
-    
-            if (roll >= skillCheck.successThreshold) {
-                applySkillCheckOutcome(skillCheck.success);
-            } else {
-                applySkillCheckOutcome(skillCheck.failure);
-            }
-        } else if (skillCheck.type === "attribute" && gameState.xp >= skillCheck.successThreshold) {
-            applySkillCheckOutcome(skillCheck.success);
-        } else {
-            applySkillCheckOutcome(skillCheck.failure);
-        }
-    }
-    
-
-
-function applySkillCheckOutcome(outcome) {
-    if (outcome.xp) {
-        gameState.xp += outcome.xp;
-        gameState.playerStats.totalXP += outcome.xp; // Use gameState.playerStats
-        xpDisplay.textContent = gameState.xp;
-    }
-    if (outcome.healthChange) {
-        gameState.health += outcome.healthChange;
-        gameState.health = Math.min(100, gameState.health);
-        gameState.playerStats.healthChanges += outcome.healthChange; // Use gameState.playerStats
-        healthDisplay.textContent = gameState.health;
-
-        if (gameState.health <= 0) {
-            gameOver();
-            return;
-        }
-    }
-    updateStory(outcome.next);
-}
 
 
 

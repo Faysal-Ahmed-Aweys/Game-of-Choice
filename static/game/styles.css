@@ -1,123 +1,7 @@
+/* General Styles */
 body {
     font-family: Arial, sans-serif;
     background-color: #1b1b1b;
-    color: #f5f5f5;
-    text-align: center;
-    padding: 20px;
-}
-
-#game-container {
-    position: relative;
-    max-width: 600px;
-    margin: auto;
-    background: rgba(0, 0, 0, 0.8); /* Opaque black background */
-    color: #fff;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-    text-align: center;
-}
-
-#choices button {
-    margin: 10px;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    background: #007BFF;
-    color: white;
-    cursor: pointer;
-}
-
-#choices button:hover {
-    background-color: #0056b3;
-}
-
-#choices button.clicked {
-    transform: scale(1.1);
-    background-color: #004085;
-    box-shadow: 0 0 10px rgba(0, 0, 255, 0.5);
-}
-
-#inventory-display {
-    font-size: 18px;
-    margin-bottom: 20px;
-    color: #FFD700; /* Gold color for inventory */
-}
-
-#inventory-display span {
-    font-weight: bold;
-    text-transform: capitalize;
-}
-
-#inventory-modal {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.8);
-    z-index: 1000;
-}
-
-#inventory-content {
-    max-width: 400px;
-    margin: 20% auto;
-    padding: 20px;
-    background: #333;
-    color: white;
-    border-radius: 10px;
-    text-align: center;
-}
-
-#progress-tracker {
-    position: fixed;
-    top: 10px;
-    right: 10px;
-    background: rgba(0, 0, 0, 0.8);
-    color: white;
-    padding: 10px;
-    border-radius: 5px;
-    width: 200px;
-}
-
-#progress-tracker ul {
-    list-style-type: none;
-    padding: 0;
-}
-
-#progress-tracker li {
-    font-size: 14px;
-    margin: 5px 0;
-    color: #4caf50;
-}
-
-
-#health-display {
-    font-size: 18px;
-    margin-bottom: 10px;
-    color: red; /* Red to indicate health */
-    font-weight: bold;
-}
-
-#game-controls {
-    margin-top: 20px;
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-}
-
-#game-controls button {
-    padding: 10px 15px;
-    font-size: 16px;
-    cursor: pointer;
-}
-
-/* General Styles */
-body {
-    font-family: 'Arial', sans-serif;
-    background: url('forest-bg.jpg') no-repeat center center fixed;
-    background-size: cover;
     color: #f5f5f5;
     text-align: center;
     margin: 0;
@@ -132,12 +16,10 @@ body {
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
-    text-align: center;
 }
 
 /* Progress Bars */
 .progress-bar {
-    position: relative;
     width: 100%;
     height: 20px;
     background: #333;
@@ -160,29 +42,7 @@ body {
     background: linear-gradient(90deg, #f44336, #ff5252);
 }
 
-#profile-modal {
-    display: block;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.8);
-    z-index: 1000;
-}
-
-#profile-content {
-    max-width: 400px;
-    margin: 20% auto;
-    padding: 20px;
-    background: #333;
-    color: white;
-    border-radius: 10px;
-    text-align: center;
-}
-
-
-/* Buttons */
+/* Choices Buttons */
 #choices button {
     margin: 10px;
     padding: 10px 20px;
@@ -200,110 +60,15 @@ body {
     box-shadow: 0 0 10px rgba(0, 123, 255, 0.5);
 }
 
-/* Modal for Milestones */
-#milestone-modal {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.8);
-    z-index: 1000;
-}
-
-#milestone-content {
-    max-width: 400px;
-    margin: 20% auto;
-    padding: 20px;
-    background: #333;
-    color: #fff;
-    border-radius: 10px;
-    text-align: center;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
-}
-
-#milestone-content h2 {
-    margin-bottom: 10px;
-}
-
-#milestone-content button {
-    padding: 10px 15px;
-    font-size: 16px;
-    background: #007BFF;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-#achievement-modal {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.8);
-    z-index: 1000;
-}
-
-#achievement-content {
-    max-width: 400px;
-    margin: 20% auto;
-    padding: 20px;
-    background: #282828;
-    color: white;
-    border-radius: 10px;
-    text-align: center;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
-    animation: slideDown 0.5s ease-out;
-}
-
-#achievement-content h2 {
-    color: gold;
-    font-size: 24px;
-    margin-bottom: 10px;
-}
-
-#achievement-content button {
-    padding: 10px 15px;
-    font-size: 16px;
-    background: #007BFF;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-#story-text {
-    transition: opacity 0.5s ease-in-out;
-}
-
-/* Player Info */
-#player-info {
-    margin: 10px 0;
+/* Inventory Display */
+#inventory-display {
     font-size: 18px;
-    color: black;
+    margin-bottom: 20px;
+    color: #FFD700; /* Gold color for inventory */
+    font-weight: bold;
 }
 
-#edit-name {
-    margin-left: 10px;
-    padding: 5px 10px;
-    background-color: #007BFF;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 14px;
-}
-
-#edit-name:hover {
-    background-color: #0056b3;
-}
-
-/* Modal */
-.modal {
+#inventory-modal {
     display: none;
     position: fixed;
     top: 0;
@@ -314,7 +79,7 @@ body {
     z-index: 1000;
 }
 
-.modal-content {
+#inventory-content {
     max-width: 400px;
     margin: 15% auto;
     padding: 20px;
@@ -324,33 +89,93 @@ body {
     text-align: center;
 }
 
-.modal-content h2 {
-    margin-bottom: 20px;
+/* Game Controls */
+#game-controls {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
 }
 
-.modal-content input {
-    width: 90%;
-    padding: 10px;
-    margin-bottom: 20px;
-    border: none;
-    border-radius: 5px;
-    font-size: 16px;
-}
-
-.modal-buttons button {
+#game-controls button {
     padding: 10px 15px;
-    margin: 5px;
     font-size: 16px;
     cursor: pointer;
     border: none;
     border-radius: 5px;
     background-color: #007BFF;
-    color: white;
+    color: #fff;
+    transition: background-color 0.3s ease;
 }
 
-.modal-buttons button:hover {
+#game-controls button:hover {
     background-color: #0056b3;
 }
+
+/* Modal Styling */
+/* Modal Container */
+/* Modal Styling */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1000; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgba(0, 0, 0, 0.8); /* Black with opacity */
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 50%; /* Adjust as needed */
+    border-radius: 10px;
+    text-align: center;
+    animation: fadeIn 0.5s;
+}
+
+.close-button {
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    color: #aaa;
+    cursor: pointer;
+}
+
+.close-button:hover {
+    color: #000;
+}
+
+
+/* Heading Style */
+.modal-content h2 {
+    margin-top: 0;
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+}
+
+/* Text Style */
+.modal-content p {
+    font-size: 18px;
+    color: #555;
+    line-height: 1.6;
+}
+
+/* Animation */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
 
 /* Menus */
 .menu {
@@ -388,4 +213,33 @@ body {
 
 .menu button:hover {
     background: #0056b3;
+}
+
+/* Story Text */
+#story-text {
+    font-size: 20px;
+    margin: 20px 0;
+    transition: opacity 0.5s ease-in-out;
+}
+
+/* Player Info */
+#player-info {
+    margin: 10px 0;
+    font-size: 18px;
+    color: #f5f5f5;
+}
+
+#edit-name {
+    margin-left: 10px;
+    padding: 5px 10px;
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+#edit-name:hover {
+    background-color: #0056b3;
 }

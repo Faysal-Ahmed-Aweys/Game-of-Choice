@@ -1,12 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     {% load static %}
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Game of Choice</title>
     <link rel="stylesheet" href="{% static 'game/styles.css' %}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
+
 <body>
     <!-- Main Menu -->
     <div id="main-menu" class="menu">
@@ -14,7 +17,6 @@
         <button id="start-game">Start New Game</button>
         <button id="continue-game">Continue</button>
         <button id="instructions">Instructions</button>
-        <button id="quit-game">Quit</button>
     </div>
 
     <!-- Pause Menu -->
@@ -23,67 +25,68 @@
         <button id="resume-game">Resume</button>
         <button id="return-to-menu">Return to Main Menu</button>
         <button id="pause-save-game">Save Game</button>
-        <button id="pause-quit-game">Quit</button>
     </div>
 
+    <!-- Player Info -->
     <div id="player-info">
         <p>Player: <span id="player-name"></span> <button id="edit-name">Edit</button></p>
     </div>
+
+    <!-- Game Container -->
     <div id="game-container">
         <h1>Game of Choice</h1>
         <p id="timer"></p>
-        <!-- XP Tracker -->
         <div id="xp-bar" class="progress-bar">
             <div id="xp-progress" class="progress" style="width: 0%;"></div>
         </div>
         <p>Experience Points: <span id="xp">0</span></p>
-        <!-- Health Tracker -->
         <div id="health-bar" class="progress-bar">
             <div id="health-progress" class="progress" style="width: 100%;"></div>
         </div>
         <p>Health: <span id="health">100</span></p>
-        <!-- Inventory Display -->
         <p id="inventory-display">Inventory: <span id="inventory">Empty</span></p>
-        <!-- Story Text -->
         <p id="story-text">You are walking in the forest alone at night. You hear a strange noise. What do you do?</p>
-        <!-- Choices Buttons -->
         <div id="choices"></div>
         <div id="stats"></div>
     </div>
 
+    <!-- Game Controls -->
     <div id="game-controls">
         <button id="save-game">Save Game</button>
         <button id="load-game">Load Game</button>
     </div>
 
     <!-- Milestone Modal -->
-    <div id="milestone-modal">
-        <div id="milestone-content">
-            <h2>Milestone Unlocked!</h2>
-            <p id="milestone-message"></p>
-            <button id="close-milestone">Close</button>
+    <div id="milestone-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <span id="close-milestone" class="close-button">&times;</span>
+            <h2>Milestone Reached!</h2>
+            <p id="milestone-message"></p> <!-- This ID must match your JS -->
         </div>
     </div>
 
-    <!-- Achievement Modal -->
-    <div id="achievement-modal">
-        <div id="achievement-content">
-            <h2>Achievement Unlocked!</h2>
-            <p id="achievement-name"></p>
-            <p id="achievement-description"></p>
-            <button id="close-achievement">Close</button>
-        </div>
-    </div>
-    <div id="inventory-modal">
-        <div id="inventory-content">
+    <!-- Inventory Modal -->
+    <div id="inventory-modal" class="modal" style="display: none;">
+        <div class="modal-content">
             <h2>Your Inventory</h2>
             <ul id="inventory-list"></ul>
             <button id="close-inventory">Close</button>
         </div>
     </div>
 
+    <div id="achievement-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <h2 id="achievement-name"></h2>
+            <p id="achievement-description"></p>
+            <button id="close-achievement">Close</button>
+        </div>
+    </div>
+
+    <!-- Open Inventory Button -->
+    <button id="open-inventory">Open Inventory</button>
+
     <!-- Name Input Modal -->
-    <div id="name-modal" class="modal">
+    <div id="name-modal" class="modal" style="display: none;">
         <div class="modal-content">
             <h2>Enter Player Name</h2>
             <input type="text" id="name-input" placeholder="Your Name">
@@ -93,7 +96,6 @@
             </div>
         </div>
     </div>
-
 
     <script src="{% static 'game/game.js' %}"></script>
 </body>
